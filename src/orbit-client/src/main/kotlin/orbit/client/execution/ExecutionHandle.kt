@@ -57,6 +57,7 @@ internal class ExecutionHandle(
     var active: Boolean = false
 
     private val channel = Channel<EventType>(addressableBufferCount)
+    private val monitorChannel = Channel<EventType>(addressableBufferCount)
 
     init {
         if (instance is AbstractAddressable) {
@@ -191,7 +192,9 @@ internal class ExecutionHandle(
 
     private sealed class EventType {
         abstract val completion: Completion
-
+        data class AskEvent(val invocation: AddressableInvocation, override val completion: Completion) : EventType()
+        data class TellEvent(val invocation: AddressableInvocation, override val completion: Completion) : EventType()
+        data class NotifyEvent(override val completion: Completion) : EventType()
         data class ActivateEvent(override val completion: Completion) : EventType()
         data class InvokeEvent(val invocation: AddressableInvocation, override val completion: Completion) : EventType()
         data class DeactivateEvent(val deactivationReason: DeactivationReason, override val completion: Completion) :
