@@ -19,6 +19,7 @@ dependencies {
     implementation(project(":src:orbit-server-prometheus"))
     implementation(project(":src:orbit-shared"))
     implementation(project(":src:orbit-util"))
+    implementation(project(":src:orbit-client"))
 
     compile("org.slf4j:slf4j-simple:$slf4jVersion")
 

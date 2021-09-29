@@ -181,6 +181,9 @@ internal class ExecutionHandle(
                     is EventType.ActivateEvent -> onActivate()
                     is EventType.InvokeEvent -> onInvoke(event.invocation)
                     is EventType.DeactivateEvent -> onDeactivate(event.deactivationReason)
+                    is EventType.AskEvent -> println(event.invocation.method)
+                    is EventType.TellEvent -> println(event.invocation.method)
+                    is EventType.NotifyEvent -> println(event.invocation.method)
                 }.also {
                     event.completion.complete(it)
                 }
@@ -194,7 +197,7 @@ internal class ExecutionHandle(
         abstract val completion: Completion
         data class AskEvent(val invocation: AddressableInvocation, override val completion: Completion) : EventType()
         data class TellEvent(val invocation: AddressableInvocation, override val completion: Completion) : EventType()
-        data class NotifyEvent(override val completion: Completion) : EventType()
+        data class NotifyEvent(val invocation: AddressableInvocation, override val completion: Completion) : EventType()
         data class ActivateEvent(override val completion: Completion) : EventType()
         data class InvokeEvent(val invocation: AddressableInvocation, override val completion: Completion) : EventType()
         data class DeactivateEvent(val deactivationReason: DeactivationReason, override val completion: Completion) :
